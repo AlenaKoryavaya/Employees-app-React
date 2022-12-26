@@ -65,17 +65,47 @@ class App extends Component {
         });
     };
 
+    // Search the needed employee (items - in this case is the data array)
+    // Ищем не по первой букве, а как при нажатии Ctrl+f (по совпадению)
+    searchEmployee = (items, term) => {
+        if (term.length === 0) {
+            return items;
+        }
+
+        return items.filter((item) => {
+            return item.name.indexOf(term) > -1;
+        });
+    };
+    // для обновления state от /search-panel.js подучаем данные из нижнего уровня на верхний и устанавливаем state (поднятие локального состояния родителю)
+    onUpdateSearch = (term) => {
+        this.setState({
+            term, // term === term: term,
+        });
+    };
+
+    filterPost = (items, filter) => {
+        switch (filter) {
+            case "raise":
+                return items.filter((item) => item.raise);
+            case "moreThan1000":
+                return items.filter((item) => item.salary > 1000);
+            default:
+                return items;
+        }
+    };
+
     render() {
-        const { data } = this.state;
+        const { data, term, filter } = this.state;
         const employees = data.length;
         const increased = data.filter((item) => item.increase).length;
+        const visibleData = this.filterPost(this.searchEmployee(data, term), filter);
 
         return (
             <div className="app">
                 <AppInfo employees={employees} increased={increased} />
                 <div className="search-panel">
-                    <SearchPanel />
-                    <AppFilter />
+                    <SearchPanel onUpdateSearch={this.onUpdateSearch} />
+                    <AppFilter onRaise={this.onRaiseFilter} />
                 </div>
                 <EmployeesList
                     data={visibleData}

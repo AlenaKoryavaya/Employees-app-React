@@ -1,6 +1,6 @@
 import "./app-filter.css";
 
-const AppFilter = () => {
+const AppFilter = (props) => {
     return (
         <div className="btn-group">
             <button className="btn btn-light" type="button">
