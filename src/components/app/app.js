@@ -47,6 +47,24 @@ class App extends Component {
         }));
     };
 
+    addItem = (name, salary) => {
+        // создаем шаблон для нов. элемента (newItem)
+        const newItem = {
+            name: name,
+            salary: salary,
+            increase: false,
+            raise: false,
+            id: this.id++,
+        };
+
+        this.setState(({ data }) => {
+            const newArr = [...data, newItem];
+            return {
+                data: newArr,
+            };
+        });
+    };
+
     render() {
         const { data } = this.state;
         const employees = data.length;
@@ -59,8 +77,12 @@ class App extends Component {
                     <SearchPanel />
                     <AppFilter />
                 </div>
-                <EmployeesList onDelete={this.deleteItem} onToggleProp={this.onToggleProp} />
-                <EmployeesAddForm />
+                <EmployeesList
+                    data={visibleData}
+                    onDelete={this.deleteItem}
+                    onToggleProp={this.onToggleProp}
+                />
+                <EmployeesAddForm onAdd={this.addItem} />
             </div>
         );
     }
