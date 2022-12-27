@@ -20,7 +20,7 @@ class App extends Component {
                 { name: "Kris Ostin", salary: 2000, increase: false, raise: false, id: 5 },
             ],
             term: "",
-            filter: "",
+            filter: "all",
         };
         this.id = this.state.data.length + 1;
     }
@@ -34,7 +34,7 @@ class App extends Component {
         });
     };
 
-    // Меняем значения свойств increase, raise на противоположные
+    // Меняем значения свойств increase, raise на противоположные (печенька, звездочка)
     onToggleProp = (id, prop) => {
         this.setState(({ data }) => ({
             data: data.map((item) => {
@@ -76,10 +76,17 @@ class App extends Component {
             return item.name.indexOf(term) > -1;
         });
     };
+
     // для обновления state от /search-panel.js подучаем данные из нижнего уровня на верхний и устанавливаем state (поднятие локального состояния родителю)
     onUpdateSearch = (term) => {
         this.setState({
             term, // term === term: term,
+        });
+    };
+
+    onUpdateFilter = (filterName) => {
+        this.setState({
+            filter: filterName,
         });
     };
 
@@ -98,14 +105,14 @@ class App extends Component {
         const { data, term, filter } = this.state;
         const employees = data.length;
         const increased = data.filter((item) => item.increase).length;
-        const visibleData = this.filterPost(this.searchEmployee(data, term), filter);
+        const visibleData = this.filterPost(this.searchEmployee(data, term), filter); // для комбинации поиска и фильтров
 
         return (
             <div className="app">
                 <AppInfo employees={employees} increased={increased} />
                 <div className="search-panel">
                     <SearchPanel onUpdateSearch={this.onUpdateSearch} />
-                    <AppFilter onRaise={this.onRaiseFilter} />
+                    <AppFilter onUpdateFilter={this.onUpdateFilter} filter={filter} />
                 </div>
                 <EmployeesList
                     data={visibleData}
