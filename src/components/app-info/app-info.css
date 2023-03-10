@@ -5,3 +5,35 @@
     box-shadow: 15px 15px 30px rgba(0, 0, 0, 0.15);
     color: #fff;
 }
+.app-info__form {
+    display: flex;
+    margin-bottom: 20px;
+}
+.app-info__form__title {
+    margin-right: 30px;
+    font-size: 40px;
+    font-weight: 600;
+}
+.app-info__form__input {
+    width: 43%;
+    padding: 0 0 0 15px;
+    text-align: center;
+    font-size: 35px;
+    font-weight: 600;
+    background: none;
+    color: #fff;
+}
+.app-info__form__input::placeholder {
+    color: #cac9c9;
+    font-size: 20px;
+}
+.app-info__form__input:focus {
+    background-color: #fff;
+    color: #324a88;
+}
+.app-info__form__input:focus::-webkit-input-placeholder {
+    color: #324a88;
+}
+.app-info__subtitle {
+    margin-bottom: 20px;
+}

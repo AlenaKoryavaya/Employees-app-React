@@ -12,28 +12,46 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: [
-                { name: "Anna Grayes", salary: 500, increase: false, raise: true, id: 1 },
-                { name: "Ivan Filipov", salary: 3500, increase: true, raise: true, id: 2 },
-                { name: "Colin Farel", salary: 900, increase: false, raise: false, id: 3 },
-                { name: "Sveta Aksert", salary: 5000, increase: false, raise: true, id: 4 },
-                { name: "Kris Ostin", salary: 2000, increase: false, raise: false, id: 5 },
-            ],
+            company: "",
+            data: [],
             term: "",
             filter: "all",
         };
         this.id = this.state.data.length + 1;
     }
 
-    // Delete a certain item
-    deleteItem = (id) => {
-        this.setState(({ data }) => {
-            return {
-                data: data.filter((elem) => elem.id !== id),
-            };
+    setCompany = (name) => {
+        this.setState({
+            company: name,
         });
     };
 
+    // Delete a certain item
+    deleteItem = (employee, id) => {
+        let question = window.confirm(
+            `Вы точно хотите удалить сотрудника ${employee} ?  После удаления вся информация о сотруднике будет также удалена.`
+        );
+
+        if (question) {
+            this.setState(({ data }) => {
+                return {
+                    data: data.filter((elem) => elem.id !== id),
+                };
+            });
+        }
+    };
+
+    onSalaryChange = (id, value) => {
+        this.setState(({ data }) => ({
+            data: data.map((item) => {
+                if (item.id === id) {
+                    return { ...item, salary: value };
+                } else {
+                    return item;
+                }
+            }),
+        }));
+    };
     // Меняем значения свойств increase, raise на противоположные (печенька, звездочка)
     onToggleProp = (id, prop) => {
         this.setState(({ data }) => ({
@@ -109,13 +127,14 @@ class App extends Component {
 
         return (
             <div className="app">
-                <AppInfo employees={employees} increased={increased} />
+                <AppInfo setCompany={this.setCompany} employees={employees} increased={increased} />
                 <div className="search-panel">
                     <SearchPanel onUpdateSearch={this.onUpdateSearch} />
                     <AppFilter onUpdateFilter={this.onUpdateFilter} filter={filter} />
                 </div>
                 <EmployeesList
                     data={visibleData}
+                    onSalaryChange={this.onSalaryChange}
                     onDelete={this.deleteItem}
                     onToggleProp={this.onToggleProp}
                 />
